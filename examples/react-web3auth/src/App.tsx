@@ -16,16 +16,17 @@ import { WalletInfo } from './components/WalletInfo'
 
 const walletManager = new WalletManager({
   wallets: [
+    {
+      id: WalletId.WEB3AUTH,
+      options: {
+        clientId:
+          import.meta.env.VITE_WEB3AUTH_CLIENT_ID || 'YOUR_CLIENT_ID',
+      },
+    },
     WalletId.PERA,
     WalletId.DEFLY,
-    WalletId.LUTE,
-    WalletId.EXODUS,
-    {
-      id: WalletId.WALLETCONNECT,
-      options: { projectId: 'fcfde0713d43baa0d23be0773c80a72b' },
-    },
   ],
-  defaultNetwork: NetworkId.TESTNET,
+  defaultNetwork: NetworkId.MAINNET,
 })
 
 function App() {
@@ -99,21 +100,28 @@ function App() {
           <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div className="text-center mb-12">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                React Components for use-wallet
+                Web3Auth + Export Key Plugin
               </h1>
               <p className="text-gray-600 dark:text-slate-300 max-w-2xl mx-auto">
-                A simple example demonstrating wallet connection, NFD profile
-                integration, and balance display using the{' '}
+                This example demonstrates using{' '}
+                <code className="text-sm bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                  Web3Auth
+                </code>{' '}
+                with the{' '}
+                <code className="text-sm bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                  exportKeyPlugin
+                </code>{' '}
+                from{' '}
                 <code className="text-sm bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
                   @txnlab/use-wallet-ui-react
-                </code>{' '}
-                package.
+                </code>
+                .
               </p>
               <p className="text-gray-500 dark:text-slate-400 text-sm mt-4">
-                Current theme:{' '}
-                <code className="bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
-                  {theme}
-                </code>
+                Connect via Web3Auth to see the{' '}
+                <strong>&quot;Export Recovery Phrase&quot;</strong> option in the
+                connected wallet menu. This option only appears for wallets that
+                support private key access.
               </p>
             </div>
 
@@ -121,17 +129,11 @@ function App() {
 
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-500 dark:text-slate-400">
-                View the{' '}
-                <a
-                  href="https://github.com/TxnLab/use-wallet-ui"
-                  className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  documentation
-                </a>{' '}
-                to learn more about implementing wallet integration in your
-                dApp.
+                Pera and Defly are included for comparison — they do not support{' '}
+                <code className="bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">
+                  canUsePrivateKey
+                </code>
+                , so the export key button will not appear for those wallets.
               </p>
             </div>
           </main>
