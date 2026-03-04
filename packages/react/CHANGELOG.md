@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/TxnLab/use-wallet-ui/compare/v1.0.0...v1.1.0) (2026-03-04)
+
+
+### Features
+
+* **plugin:** add modular plugin architecture for UI extensions ([#44](https://github.com/TxnLab/use-wallet-ui/issues/44)) ([cf08429](https://github.com/TxnLab/use-wallet-ui/commit/cf0842960b2481a9766e51d946f7e7339eb109d8))
+
 # [1.0.0](https://github.com/TxnLab/use-wallet-ui/compare/v0.4.2...v1.0.0) (2026-01-21)
 
 
