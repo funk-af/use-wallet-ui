@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useFloating, offset, flip, shift } from '@floating-ui/vue'
 import { useWallet } from '@txnlab/use-wallet-vue'
 import { formatNumber, formatShortAddress } from '@txnlab/utils-ts'
 
@@ -18,6 +19,13 @@ import type { MenuRenderContext } from '../plugins/types'
 const { activeAddress, activeWallet } = useWallet()
 const { theme, resolvedTheme } = useWalletUI()
 const { openDialog, closeDialog, panels } = usePlugins()
+
+const referenceEl = ref<HTMLElement | null>(null)
+const floatingEl = ref<HTMLElement | null>(null)
+const { floatingStyles } = useFloating(referenceEl, floatingEl, {
+  middleware: [offset(8), flip(), shift({ padding: 8 })],
+  placement: 'bottom-end',
+})
 
 const isOpen = ref(false)
 const activePanel = ref<string | null>(null)
@@ -137,7 +145,7 @@ function toggleBalanceView(): void {
 
 <template>
   <div class="relative inline-block">
-    <div @click="toggleMenu">
+    <div ref="referenceEl" @click="toggleMenu">
       <slot>
         <ConnectedWalletButton />
       </slot>
@@ -153,7 +161,9 @@ function toggleBalanceView(): void {
         <div class="fixed inset-0 z-40" @mousedown.self="closeMenu" />
 
         <div
-          class="absolute right-4 top-20 z-50 w-80 rounded-xl bg-[var(--wui-color-bg)] shadow-xl border border-[var(--wui-color-border)]"
+          ref="floatingEl"
+          :style="floatingStyles"
+          class="z-50 w-80 rounded-xl bg-[var(--wui-color-bg)] shadow-xl border border-[var(--wui-color-border)]"
         >
           <div class="p-4">
             <template v-if="currentPanel">
