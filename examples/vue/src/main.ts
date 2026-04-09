@@ -21,7 +21,7 @@ app.use(WalletManagerPlugin, {
       options: { projectId: 'fcfde0713d43baa0d23be0773c80a72b' },
     },
   ],
-  defaultNetwork: NetworkId.MAINNET,
+  defaultNetwork: NetworkId.TESTNET,
 })
 
 app.mount('#app')

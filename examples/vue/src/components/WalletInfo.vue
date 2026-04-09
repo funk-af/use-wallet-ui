@@ -8,10 +8,10 @@ const { activeAddress } = useWallet()
 const nfdQuery = useNfd()
 const accountQuery = useAccountInfo()
 
-const nfd = computed(() => nfdQuery.data?.value ?? null)
-const accountInfo = computed(() => accountQuery.data?.value)
 const algoBalance = computed(() =>
-  accountInfo.value ? Number(accountInfo.value.amount) / 1_000_000 : 0,
+  accountQuery.data.value
+    ? Number(accountQuery.data.value.amount) / 1_000_000
+    : 0,
 )
 </script>
 
@@ -43,13 +43,13 @@ const algoBalance = computed(() =>
       class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
     >
       <div class="flex items-center gap-4">
-        <NfdAvatar :nfd="nfd" :size="64" class="rounded-xl" />
+        <NfdAvatar :nfd="nfdQuery.data.value" :size="64" class="rounded-xl" />
         <div>
           <h2 class="text-xl font-bold text-gray-900 dark:text-white">
-            {{ nfd?.name || formatShortAddress(activeAddress) }}
+            {{ nfdQuery.data.value?.name || formatShortAddress(activeAddress) }}
           </h2>
           <p
-            v-if="nfd?.name"
+            v-if="nfdQuery.data.value?.name"
             class="text-sm text-gray-500 dark:text-slate-400 font-mono"
           >
             {{ formatShortAddress(activeAddress) }}
@@ -67,8 +67,8 @@ const algoBalance = computed(() =>
 
     <div
       v-if="
-        nfd?.properties?.userDefined &&
-        Object.keys(nfd.properties.userDefined).length > 0
+        nfdQuery.data.value?.properties?.userDefined &&
+        Object.keys(nfdQuery.data.value.properties.userDefined).length > 0
       "
       class="mt-6 pt-6 border-t border-gray-100 dark:border-slate-700"
     >
@@ -77,7 +77,9 @@ const algoBalance = computed(() =>
       </h3>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         <div
-          v-for="[key, value] in Object.entries(nfd.properties.userDefined)"
+          v-for="[key, value] in Object.entries(
+            nfdQuery.data.value.properties.userDefined,
+          )"
           :key="key"
           class="bg-gray-50 dark:bg-slate-800 p-3 rounded-lg"
         >
