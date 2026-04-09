@@ -16,10 +16,6 @@ const algoBalance = computed(() =>
 </script>
 
 <template>
-  <div class="text-white">
-    {{ nfdQuery.isLoading }} {{ accountQuery.isLoading }}
-  </div>
-
   <div
     v-if="!activeAddress"
     class="text-center p-8 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-700"
