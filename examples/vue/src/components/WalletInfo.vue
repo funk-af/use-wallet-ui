@@ -29,7 +29,7 @@ const algoBalance = computed(() =>
   </div>
 
   <div
-    v-else-if="nfdQuery.isLoading || accountQuery.isLoading"
+    v-else-if="nfdQuery.isLoading.value || accountQuery.isLoading.value"
     class="text-center p-8 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-100 dark:border-slate-700"
   >
     <p class="text-gray-600 dark:text-slate-300">Loading wallet data...</p>
