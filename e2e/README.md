@@ -39,7 +39,7 @@ Visual regression tests capture screenshots and compare them against baseline im
 When UI changes are intentional, update the baseline snapshots using Docker to match CI:
 
 ```bash
-pnpm e2e:update:docker
+pnpm test:e2e:update:docker
 ```
 
 This runs in the same Linux environment as CI, ensuring consistent baselines. After running, review the changes and commit:

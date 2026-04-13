@@ -23,8 +23,8 @@ const lightThemeVars = `
   --wui-color-bg-secondary: #f9fafb; --wui-color-bg-tertiary: #f3f4f6;
   --wui-color-bg-hover: #e9e9fd; --wui-color-text: #1f2937;
   --wui-color-text-secondary: #6b7280; --wui-color-text-tertiary: #9ca3af;
-  --wui-color-border: #e5e7eb; --wui-color-link: rgba(45,45,241,0.8);
-  --wui-color-link-hover: #2d2df1; --wui-color-overlay: rgba(0,0,0,0.3);
+  --wui-color-border: #e5e7eb; --wui-color-link: rgba(45, 45, 241, 0.8);
+  --wui-color-link-hover: #2d2df1; --wui-color-overlay: rgba(0, 0, 0, 0.3);
   --wui-color-danger-bg: #fee2e2; --wui-color-danger-bg-hover: #fecaca;
   --wui-color-danger-text: #b91c1c; --wui-color-avatar-bg: #e5e7eb;
   --wui-color-avatar-icon: #9ca3af;
@@ -37,8 +37,8 @@ const darkThemeVars = `
   --wui-color-bg-hover: #192a39; --wui-color-text: #e9e9fd;
   --wui-color-text-secondary: #99a1a7; --wui-color-text-tertiary: #6b7280;
   --wui-color-border: #192a39; --wui-color-link: #6c6cf1;
-  --wui-color-link-hover: #8080f3; --wui-color-overlay: rgba(0,0,0,0.5);
-  --wui-color-danger-bg: rgba(127,29,29,0.4); --wui-color-danger-bg-hover: rgba(127,29,29,0.6);
+  --wui-color-link-hover: #8080f3; --wui-color-overlay: rgba(0, 0, 0, 0.5);
+  --wui-color-danger-bg: rgba(127, 29, 29, 0.4); --wui-color-danger-bg-hover: rgba(127, 29, 29, 0.6);
   --wui-color-danger-text: #fca5a5; --wui-color-avatar-bg: #192a39;
   --wui-color-avatar-icon: #6b7280;
 `
