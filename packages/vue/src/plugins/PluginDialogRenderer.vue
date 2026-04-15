@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, h } from 'vue'
+import { computed } from 'vue'
 import { usePlugins } from './pluginContext'
 import { useWalletUI } from '../providers/walletUIContext'
+import RenderVNode from './RenderVNode'
 
 const { dialogs, openDialogs, closeDialog, renderContext } = usePlugins()
 const { theme } = useWalletUI()
@@ -20,16 +21,13 @@ const dataTheme = computed(() =>
         data-wallet-ui
         :data-theme="dataTheme"
       >
-        <component
-          :is="
-            () =>
-              h('div', {}, [
-                dialog.render({
-                  isOpen: openDialogs.has(dialog.key),
-                  onClose: () => closeDialog(dialog.key),
-                  ctx: renderContext,
-                }),
-              ])
+        <RenderVNode
+          :vnode="
+            dialog.render({
+              isOpen: openDialogs.has(dialog.key),
+              onClose: () => closeDialog(dialog.key),
+              ctx: renderContext,
+            })
           "
         />
       </div>

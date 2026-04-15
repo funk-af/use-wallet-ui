@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { h } from 'vue'
 import { usePlugins } from './pluginContext'
+import RenderVNode from './RenderVNode'
 import type { MenuRenderContext, MenuSlot } from './types'
 
 const props = defineProps<{
@@ -13,9 +13,9 @@ const { menuItemsBySlot } = usePlugins()
 
 <template>
   <template v-for="item in menuItemsBySlot[props.slot]" :key="item.key">
-    <component
+    <RenderVNode
       v-if="!item.enabled || item.enabled(props.ctx)"
-      :is="() => h('div', {}, [item.render(props.ctx)])"
+      :vnode="item.render(props.ctx)"
     />
   </template>
 </template>
