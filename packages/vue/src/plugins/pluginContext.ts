@@ -124,12 +124,8 @@ export function providePlugins(
     openDialogs.value = next
   }
 
-  // Build enriched render context with working openDialog/closeDialog
-  const enrichedContext: PluginRenderContext = {
-    ...renderContext,
-    openDialog,
-    closeDialog,
-  }
+  // Add openDialog and closeDialog to renderContext without losing reactivity
+  Object.assign(renderContext, { openDialog, closeDialog })
 
   // Group menu items by slot and sort by order
   const menuItemsBySlot: Record<MenuSlot, PluginMenuItem[]> = {
@@ -168,7 +164,7 @@ export function providePlugins(
     openDialogs: readonly(openDialogs) as Ref<Set<string>>,
     panels,
     plugins,
-    renderContext: enrichedContext,
+    renderContext,
   }
 
   provide(PLUGIN_CONTEXT_KEY, context)
