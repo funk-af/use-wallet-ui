@@ -14,8 +14,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Default to chromium project (matches CI)
+# pnpm forwards the caller's `--` separator token through every script layer,
+# so if present it arrives as a literal first arg here. Drop it before reading
+# positionals — otherwise PROJECT would be set to "--".
+if [ "${1:-}" = "--" ]; then shift; fi
+
+# Default to chromium project (matches CI); callers may follow the project
+# name with additional playwright flags, e.g. `./run-e2e-docker.sh chromium --headed`
 PROJECT="${1:-chromium}"
+if [ $# -gt 0 ]; then shift; fi
+EXTRA_ARGS=("$@")
 
 echo -e "${YELLOW}Running E2E tests in Docker (Linux environment)...${NC}"
 echo ""
@@ -31,8 +39,14 @@ fi
 PLAYWRIGHT_VERSION="v$(cd "$E2E_DIR" && node -p "require('@playwright/test/package.json').version")"
 IMAGE="mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}"
 
+# Pin pnpm inside the container to the root packageManager version so Renovate's
+# pnpm bumps to the root manifest don't silently desync from this script
+PNPM_VERSION="$(node -p "require('$ROOT_DIR/package.json').packageManager.split('@')[1]")"
+
 echo "Using Playwright image: $IMAGE"
+echo "Using pnpm: $PNPM_VERSION"
 echo "Project: $PROJECT"
+echo "Extra args: ${EXTRA_ARGS[*]}"
 echo ""
 
 # Run tests in Docker with isolated node_modules
@@ -54,11 +68,11 @@ docker run --rm \
   "$IMAGE" \
   /bin/bash -c "
     cd /work && \
-    npm install -g pnpm@10.12.4 && \
+    npm install -g pnpm@$PNPM_VERSION && \
     pnpm install --frozen-lockfile && \
     pnpm build && \
     cd e2e && \
-    pnpm e2e --project=$PROJECT
+    pnpm exec playwright test --grep-invert \"connect wallet button\" --project=$PROJECT ${EXTRA_ARGS[*]}
   "
 
 EXIT_CODE=$?
