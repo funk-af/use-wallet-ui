@@ -17,6 +17,13 @@ NC='\033[0m' # No Color
 # Default to chromium project (matches CI); callers can override via args,
 # e.g. `pnpm test:e2e:update:docker -- --project=vue-chromium`
 PROJECT_ARGS=("$@")
+# pnpm forwards the caller's `--` separator token through every script layer,
+# so if present it arrives as a literal arg here. Drop it so it doesn't land
+# between `playwright test` and the forwarded flags — playwright would treat
+# everything after `--` as positional test-file regexes and match nothing.
+if [ "${PROJECT_ARGS[0]:-}" = "--" ]; then
+  PROJECT_ARGS=("${PROJECT_ARGS[@]:1}")
+fi
 if [ ${#PROJECT_ARGS[@]} -eq 0 ]; then
   PROJECT_ARGS=(--project=chromium)
 fi
@@ -35,7 +42,12 @@ fi
 PLAYWRIGHT_VERSION="v$(cd "$E2E_DIR" && node -p "require('@playwright/test/package.json').version")"
 IMAGE="mcr.microsoft.com/playwright:${PLAYWRIGHT_VERSION}"
 
+# Pin pnpm inside the container to the root packageManager version so Renovate's
+# pnpm bumps to the root manifest don't silently desync from this script
+PNPM_VERSION="$(node -p "require('$ROOT_DIR/package.json').packageManager.split('@')[1]")"
+
 echo "Using Playwright image: $IMAGE"
+echo "Using pnpm: $PNPM_VERSION"
 echo "Mounting: $ROOT_DIR -> /work"
 echo "Project args: ${PROJECT_ARGS[*]}"
 echo ""
@@ -60,11 +72,11 @@ docker run --rm \
   "$IMAGE" \
   /bin/bash -c "
     cd /work && \
-    npm install -g pnpm@10.12.4 && \
+    npm install -g pnpm@$PNPM_VERSION && \
     pnpm install --frozen-lockfile && \
     pnpm build && \
     cd e2e && \
-    pnpm e2e:update ${PROJECT_ARGS[*]}
+    pnpm exec playwright test --update-snapshots ${PROJECT_ARGS[*]}
   "
 
 echo ""
